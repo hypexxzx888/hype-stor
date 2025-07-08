@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hype Store</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    header {
+      background-color: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 25px 0;
+      text-align: center;
+      font-size: 28px;
+      letter-spacing: 3px;
+      font-weight: 700;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    section.loja, section.estoque {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 20px;
+      background: rgba(0, 0, 0, 0.45);
+      border-radius: 12px;
+      box-shadow: 0 8px 15px rgba(0,0,0,0.25);
+    }
+
+    section.loja h2, section.estoque h2 {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 2rem;
+      letter-spacing: 2px;
+      text-shadow: 0 0 7px #000;
+    }
+
+    .produtos, .produtos-estoque {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .produto {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 18px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+      transition: transform 0.3s ease;
+      cursor: pointer;
+    }
+    .produto:hover {
+      transform: scale(1.05);
+      background: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+
+    .produto img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.4);
+    }
+
+    .produto h3 {
+      margin: 12px 0 6px;
+      font-size: 1.2rem;
+      color: #fff;
+      text-shadow: 0 0 6px #000;
+    }
+
+    .produto p {
+      margin: 0 0 12px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      color: #ddd;
+      text-shadow: 0 0 5px #000;
+    }
+
+    .produto button {
+      padding: 10px 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      background: #4c32a4;
+      color: white;
+      box-shadow: 0 4px 8px #3b2671;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+    .produto button:hover {
+      background: #7859d4;
+      box-shadow: 0 6px 12px #5e47a8;
+    }
+
+    footer {
+      background-color: rgba(0,0,0,0.8);
+      color: #ccc;
+      text-align: center;
+      padding: 18px 10px;
+      font-size: 0.9rem;
+      letter-spacing: 1.3px;
+      margin-top: 50px;
+      user-select: none;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 150;
+      left: 0; top: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      backdrop-filter: blur(3px);
+    }
+
+    .modal-content {
+      background: #222;
+      padding: 30px 25px;
+      border-radius: 16px;
+      text-align: center;
+      max-width: 320px;
+      color: #eee;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.7);
+      position: relative;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .modal-content h3 {
+      margin-bottom: 14px;
+      font-size: 1.5rem;
+      text-shadow: 0 0 5px #6a4cc2;
+    }
+
+    .modal-content p {
+      margin: 0 0 20px;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #bfbfbf;
+      text-shadow: 0 0 4px #444;
+    }
+
+    .modal-content button {
+      margin-top: 12px;
+      padding: 12px 20px;
+      border-radius: 10px;
+      background: #6b4cd2;
+      color: white;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 5px 15px #513bb5;
+      transition: background-color 0.3s ease;
+    }
+    .modal-content button:hover {
+      background-color: #886be7;
+      box-shadow: 0 8px 20px #7156cc;
+    }
+
+    .close {
+      background: #d9534f;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 10px;
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      cursor: pointer;
+      box-shadow: 0 3px 8px #a23a3a;
+      transition: background-color 0.3s ease;
+    }
+    .close:hover {
+      background: #e06a64;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    Hype Store
+  </header>
+
+  <section class="loja">
+    <h2>Loja</h2>
+    <div class="produtos">
+      <div class="produto">
+        <img src="https://via.placeholder.com/300x150?text=Mimic+Octupos" alt="Mimic Octupos" />
+        <h3>Mimic Octupos</h3>
+        <p>R$ 30,00</p>
+        <button onclick="abrirModal('Mimic Octupos', '30,00')">Comprar</button>
+      </div>
+      <div class="produto">
+        <img src="https://via.placeholder.com/300x150?text=7.5T" alt="7.5T" />
+        <h3>7.5T</h3>
+        <p>R$ 7,00</p>
+        <button onclick="abrirModal('7.5T', '7,00')">Comprar</button>
+      </div>
+      <div class="produto">
+        <img src="https://via.placeholder.com/300x150?text=60T" alt="60T" />
+        <h3>60T</h3>
+        <p>R$ 14,00</p>
+        <button onclick="abrirModal('60T', '14,00')">Comprar</button>
+      </div>
+      <div class="produto">
+        <img src="https://via.placeholder.com/300x150?text=650T" alt="650T" />
+        <h3>650T</h3>
+        <p>R$ 20,00</p>
+        <button onclick="abrirModal('650T', '20,00')">Comprar</button>
+      </div>
+      <div class="produto">
+        <img src="https://via.placeholder.com/300x150?text=7.7QD" alt="7.7QD" />
+        <h3>7.7QD</h3>
+        <p>R$ 40,00</p>
+        <button onclick="abrirModal('7.7QD', '40,00')">Comprar</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="estoque">
+    <h2>Estoque Grow a Garden</h2>
+    <div class="produtos-estoque">
+      <div class="produto" onclick="abrirModal('Roube um Brainrot', 'Preço sob consulta')">
+        <img src="https://via.placeholder.com/300x150?text=Brainrot" alt="Brainrot" />
+        <h3>Roube um Brainrot</h3>
+        <p>Preço sob consulta</p>
+        <button onclick="abrirModal('Roube um Brainrot', 'Preço sob consulta')">Comprar</button>
+      </div>
+
+      <div class="produto" onclick="abrirModal('La grande combinação', '30,00')">
+        <img src="https://via.placeholder.com/300x150?text=La+grande+combinação" alt="La grande combinação" />
+        <h3>La grande combinação</h3>
+        <p>R$ 30,00 (com mutação de gato)</p>
+        <button onclick="abrirModal('La grande combinação (com mutação de gato)', '30,00')">Comprar</button>
+      </div>
+
+      <div class="produto" onclick="abrirModal('Los tralarelitos (gold)', '15,00')">
+        <img src="https://via.placeholder.com/300x150?text=Los+tralarelitos+gold" alt="Los tralarelitos gold" />
+        <h3>Los tralarelitos (gold)</h3>
+        <p>R$ 15,00</p>
+        <button onclick="abrirModal('Los tralarelitos (gold)', '15,00')">Comprar</button>
+      </div>
+
+      <div class="produto" onclick="abrirModal('La vaca (mutação de tacos)', '7,00')">
+        <img src="https://via.placeholder.com/300x150?text=La+vaca+mutação+de+tacos" alt="La vaca mutação de tacos" />
+        <h3>La vaca (mutação de tacos)</h3>
+        <p>R$ 7,00</p>
+        <button onclick="abrirModal('La vaca (mutação de tacos)', '7,00')">Comprar</button>
+      </div>
+
+      <div class="produto" onclick="abrirModal('La vaca (blood)', '8,00')">
+        <img src="https://via.placeholder.com/300x150?text=La+vaca+blood" alt="La vaca blood" />
+        <h3>La vaca (blood)</h3>
+        <p>R$ 8,00</p>
+        <button onclick="abrirModal('La vaca (blood)', '8,00')">Comprar</button>
+      </div>
+
+      <div class="produto" onclick="abrirModal('Los tralarelitos (normal)', '10,00')">
+        <img src="https://via.placeholder.com/300x150?text=Los+tralarelitos+normal" alt="Los tralarelitos normal" />
+        <h3>Los tralarelitos (normal)</h3>
+        <p>R$ 10,00</p>
+        <button onclick="abrirModal('Los tralarelitos (normal)', '10,00')">Comprar</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Modal -->
+  <div class="modal" id="modalCompra">
+    <div class="modal-content">
+      <button class="close" onclick="fecharModal()">X</button>
+      <h3 id="modalProduto"></h3>
+      <p id="modalPreco"></p>
+      <a id="btnComprar" href="#" target="_blank">
+        <button>Finalizar Compra via WhatsApp</button>
+      </a>
+    </div>
+  </div>
+
+  <footer>
+    © 2025 Hype Store - Todos os direitos reservados
+  </footer>
+
+  <script>
+    const whatsappNumber = "5511984071037";
+
+    function abrirModal(produto, preco) {
+      document.getElementById("modalProduto").innerText = produto;
+      document.getElementById("modalPreco").innerText = preco === "Preço sob consulta" ? preco : "Preço: R$ " + preco;
+      const mensagem = encodeURIComponent(`Olá! Tenho interesse em comprar o produto: ${produto} por ${preco === "Preço sob consulta" ? "preço sob consulta" : "R$ " + preco}`);
+      document.getElementById("btnComprar").href = `https://wa.me/${whatsappNumber}?text=${mensagem}`;
+      document.getElementById("modalCompra").style.display = "flex";
+    }
+
+    function fecharModal() {
+      document.getElementById("modalCompra").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
